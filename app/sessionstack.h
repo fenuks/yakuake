@@ -52,6 +52,8 @@ class SessionStack : public QStackedWidget
 
         bool requiresVisualEventOverlay();
 
+        Session* getSession(int sessionId);
+
 
     public Q_SLOTS:
         int addSessionImpl(Session::SessionType type = Session::Single);

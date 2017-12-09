@@ -24,6 +24,7 @@
 
 #include <KParts/Part>
 
+#include <QDir>
 #include <QPointer>
 
 
@@ -37,7 +38,7 @@ class Terminal : public QObject
     Q_OBJECT
 
     public:
-        explicit Terminal(QWidget* parent = 0);
+        explicit Terminal(QWidget* parent = 0, const QString& workingDir = QDir::homePath());
          ~Terminal();
 
         bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
@@ -49,6 +50,7 @@ class Terminal : public QObject
         QWidget* terminalWidget() { return m_terminalWidget; }
 
         QWidget* splitter() { return m_parentSplitter; }
+        QString getCwd();
         void setSplitter(QWidget* splitter) { m_parentSplitter = splitter; }
 
         void runCommand(const QString& command);

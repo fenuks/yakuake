@@ -42,7 +42,7 @@
 
 int Terminal::m_availableTerminalId = 0;
 
-Terminal::Terminal(QWidget* parent) : QObject(parent)
+Terminal::Terminal(QWidget* parent, const QString& workingDir) : QObject(parent)
 {
     m_terminalId = m_availableTerminalId;
     m_availableTerminalId++;
@@ -86,7 +86,7 @@ Terminal::Terminal(QWidget* parent) : QObject(parent)
         disableOffendingPartActions();
 
         m_terminalInterface = qobject_cast<TerminalInterface*>(m_part);
-        if (m_terminalInterface) m_terminalInterface->showShellInDir(QDir::homePath());
+        if (m_terminalInterface)  m_terminalInterface->showShellInDir(workingDir);
     }
     else
         displayKPartLoadError();
@@ -231,6 +231,11 @@ void Terminal::setTitle(const QString& title)
 void Terminal::runCommand(const QString& command)
 {
     m_terminalInterface->sendInput(command + QStringLiteral("\n"));
+}
+
+QString Terminal::getCwd()
+{
+    return m_terminalInterface->currentWorkingDirectory();
 }
 
 void Terminal::manageProfiles()

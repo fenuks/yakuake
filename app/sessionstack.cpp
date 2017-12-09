@@ -51,7 +51,7 @@ SessionStack::~SessionStack()
 
 int SessionStack::addSessionImpl(Session::SessionType type)
 {
-    Session* session = new Session(type, this);
+    Session* session = new Session(type, this, getSession(m_activeSessionId));
     connect(session, SIGNAL(titleChanged(int,QString)), this, SIGNAL(titleChanged(int,QString)));
     connect(session, SIGNAL(terminalManuallyActivated(Terminal*)), this, SLOT(handleManualTerminalActivation(Terminal*)));
     connect(session, SIGNAL(keyboardInputBlocked(Terminal*)), m_visualEventOverlay, SLOT(indicateKeyboardInputBlocked(Terminal*)));
@@ -596,6 +596,13 @@ bool SessionStack::requiresVisualEventOverlay()
     if (!m_sessions.contains(m_activeSessionId)) return false;
 
     return m_sessions.value(m_activeSessionId)->hasTerminalsWithKeyboardInputDisabled();
+}
+
+Session* SessionStack::getSession(int sessionId)
+{
+    if (!m_sessions.contains(sessionId)) return 0;
+
+    return m_sessions.value(sessionId);
 }
 
 void SessionStack::handleTerminalHighlightRequest(int terminalId)
