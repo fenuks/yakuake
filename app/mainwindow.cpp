@@ -85,6 +85,7 @@ MainWindow::MainWindow(QWidget* parent)
     m_tabBar = new TabBar(this);
     m_titleBar = new TitleBar(this);
     m_firstRunDialog = NULL;
+    m_isFullscreen = false;
 
 #if HAVE_X11
     m_kwinAssistPropSet = false;
@@ -1311,6 +1312,7 @@ void MainWindow::sharedPreOpenWindow()
     updateUseTranslucency();
 
     if (Settings::pollMouse()) toggleMousePoll(false);
+    if (Settings::rememberFullscreen()) setFullScreen(m_isFullscreen);
 }
 
 void MainWindow::sharedAfterOpenWindow()
@@ -1388,6 +1390,7 @@ void MainWindow::setKeepOpen(bool keepOpen)
 
 void MainWindow::setFullScreen(bool state)
 {
+    if (isVisible()) m_isFullscreen = state;
     if (state)
     {
         setWindowState(windowState() | Qt::WindowFullScreen);
